@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sto lat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0D0810;
+      --bg-mid:    #1a0d18;
+      --pink:      #FF2D9B;
+      --pink-soft: #ff80c8;
+      --cream:     #FFE8F4;
+      --muted:     #8B5070;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 40%, rgba(255,45,155,0.07) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Gwiazdki generowane przez JS — każda to span absolutnie pozycjonowany */
+    .star {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      font-size: 10px;
+      line-height: 1;
+      user-select: none;
+    }
+
+    /* Świeczka */
+    .candle-wrap {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 2;
+    }
+
+    .flame {
+      width: 10px;
+      height: 18px;
+      background: radial-gradient(ellipse at 50% 80%, #fff 0%, #FFD700 30%, #FF8C00 60%, transparent 100%);
+      border-radius: 50% 50% 30% 30%;
+      animation: flicker 1.8s ease-in-out infinite alternate;
+      filter: blur(0.5px);
+      margin-bottom: 1px;
+    }
+
+    .flame-glow {
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 28px;
+      height: 28px;
+      background: radial-gradient(circle, rgba(255,160,50,0.35) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: flickerGlow 1.8s ease-in-out infinite alternate;
+    }
+
+    .wick {
+      width: 2px;
+      height: 6px;
+      background: #555;
+    }
+
+    .candle-body {
+      width: 14px;
+      height: 36px;
+      background: linear-gradient(to right, #d0d0d0, #ffffff, #e8e8e8, #ffffff, #c8c8c8);
+      border-radius: 2px 2px 3px 3px;
+      position: relative;
+      box-shadow: 0 0 10px rgba(255,255,255,0.15);
+    }
+
+    .candle-body::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 3px;
+      width: 4px;
+      height: 12px;
+      background: rgba(255,255,255,0.35);
+      border-radius: 0 0 4px 4px;
+    }
+
+    .candle-light {
+      position: fixed;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(ellipse at 50% 10%, rgba(255,100,180,0.1) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 1;
+      animation: flickerGlow 1.8s ease-in-out infinite alternate;
+    }
+
+    @keyframes flicker {
+      0%   { transform: scaleX(1)    scaleY(1)    rotate(-1deg); opacity: 1; }
+      33%  { transform: scaleX(0.9)  scaleY(1.05) rotate(1deg);  opacity: 0.95; }
+      66%  { transform: scaleX(1.1)  scaleY(0.95) rotate(-2deg); opacity: 1; }
+      100% { transform: scaleX(0.95) scaleY(1.1)  rotate(1deg);  opacity: 0.9; }
+    }
+
+    @keyframes flickerGlow {
+      0%   { opacity: 0.8; }
+      50%  { opacity: 1;   }
+      100% { opacity: 0.7; }
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 100px 20px 60px;
+      gap: 48px;
+    }
+
+    .header { text-align: center; }
+
+    .header-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      color: var(--pink-soft);
+      margin-bottom: 16px;
+      opacity: 0.7;
+    }
+
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1.25;
+    }
+
+    .header h1 em {
+      font-style: italic;
+      color: var(--cream);
+    }
+
+    .board {
+      background: var(--bg-mid);
+      border: 1px solid rgba(255,45,155,0.2);
+      border-radius: 6px;
+      padding: 32px 40px;
+      display: flex;
+      gap: 32px;
+      align-items: center;
+      box-shadow: 0 0 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,45,155,0.12);
+    }
+
+    .unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .unit-digits { display: flex; gap: 4px; }
+
+    .digit {
+      width: clamp(44px, 8vw, 72px);
+      height: clamp(64px, 12vw, 108px);
+      background: #0a0510;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: var(--cream);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,45,155,0.1);
+      line-height: 1;
+    }
+
+    .digit::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      top: 50%;
+      height: 1px;
+      background: rgba(0,0,0,0.7);
+    }
+
+    .digit.flip { animation: flipDown 0.35s ease; }
+
+    @keyframes flipDown {
+      0%   { transform: rotateX(0deg);   color: var(--pink); }
+      50%  { transform: rotateX(-90deg); }
+      100% { transform: rotateX(0deg);   color: var(--cream); }
+    }
+
+    .unit-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .sep {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      color: var(--cream);
+      opacity: 0.8;
+      line-height: 1;
+      padding-bottom: 20px;
+    }
+
+    .footer-text {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+      color: var(--muted);
+      font-style: italic;
+      max-width: 400px;
+      line-height: 1.8;
+    }
+
+    @media (max-width: 520px) {
+      .board { gap: 14px; padding: 22px 16px; }
+      .sep { font-size: 1.2rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .digit.flip { animation: none; }
+      .flame, .flame-glow, .candle-light { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="candle-light"></div>
+
+<div class="candle-wrap">
+  <div style="position:relative;">
+    <div class="flame-glow"></div>
+    <div class="flame"></div>
+  </div>
+  <div class="wick"></div>
+  <div class="candle-body"></div>
+</div>
+
+<main>
+  <div class="header">
+    <p class="header-eyebrow">29 · 10 · 2026</p>
+    <h1>Oj Agatko<em>..</em></h1>
+  </div>
+
+  <div class="board" id="board">
+    <div class="unit">
+      <div class="unit-digits">
+        <div class="digit" id="d0">0</div>
+        <div class="digit" id="d1">0</div>
+      </div>
+      <span class="unit-label">dni</span>
+    </div>
+    <span class="sep">:</span>
+    <div class="unit">
+      <div class="unit-digits">
+        <div class="digit" id="h0">0</div>
+        <div class="digit" id="h1">0</div>
+      </div>
+      <span class="unit-label">godzin</span>
+    </div>
+    <span class="sep">:</span>
+    <div class="unit">
+      <div class="unit-digits">
+        <div class="digit" id="m0">0</div>
+        <div class="digit" id="m1">0</div>
+      </div>
+      <span class="unit-label">minut</span>
+    </div>
+    <span class="sep">:</span>
+    <div class="unit">
+      <div class="unit-digits">
+        <div class="digit" id="s0">0</div>
+        <div class="digit" id="s1">0</div>
+      </div>
+      <span class="unit-label">sekund</span>
+    </div>
+  </div>
+
+  <p class="footer-text">Wszystkiego dobrego życzymy, życzymy,<br>i zdrowia, i szczęścia,<br>i błogosławieństwa<br>przez ręce Maryi.</p>
+
+  <!-- PRZYCISKI — pojawiają się gdy licznik osiągnie dany próg -->
+
+  <!-- PRZYCISK 1 — pojawia się przy 30 dniach
+       tekst przycisku: "o matko to już 30 dni..."
+       popup: [do uzupełnienia]
+  -->
+
+  <!-- PRZYCISK 2 — pojawia się przy 25 dniach
+       tekst przycisku: "czy już czujesz się staro?"
+       popup: [do uzupełnienia]
+  -->
+
+  <!-- PRZYCISK 3 — pojawia się przy 20 dniach
+       tekst przycisku: "słyszysz to?"
+       popup: [do uzupełnienia]
+  -->
+
+  <!-- PRZYCISK 4 — pojawia się przy 15 dniach
+       tekst przycisku: "tak ja też to słyszę?"
+       popup: [do uzupełnienia]
+  -->
+
+  <!-- PRZYCISK 5 — pojawia się przy 10 dniach
+       tekst przycisku: "omg to chyba pociąg"
+       popup: [do uzupełnienia]
+  -->
+
+  <!-- PRZYCISK 6 — pojawia się przy 5 dniach
+       tekst przycisku: "niesamowite! wsiadamy!"
+       popup: [do uzupełnienia]
+  -->
+</main>
+
+<script>
+  // 24 gwiazdki — pozycje losowe ale ustalone
+  const stars = [
+    {x:5,  y:8,  s:9,  c:'#FFE8F4', o:0.85},
+    {x:18, y:4,  s:7,  c:'#ffffff', o:0.9},
+    {x:32, y:9,  s:8,  c:'#ff80c8', o:0.6},
+    {x:47, y:5,  s:10, c:'#FFE8F4', o:0.8},
+    {x:63, y:7,  s:7,  c:'#ffffff', o:0.95},
+    {x:78, y:3,  s:8,  c:'#ff80c8', o:0.55},
+    {x:91, y:9,  s:9,  c:'#FFE8F4', o:0.8},
+    {x:97, y:18, s:7,  c:'#ffffff', o:0.9},
+    {x:3,  y:28, s:8,  c:'#ff80c8', o:0.6},
+    {x:13, y:22, s:6,  c:'#FFE8F4', o:0.7},
+    {x:55, y:15, s:7,  c:'#ffffff', o:0.85},
+    {x:85, y:22, s:9,  c:'#ff80c8', o:0.55},
+    {x:8,  y:48, s:7,  c:'#FFE8F4', o:0.75},
+    {x:95, y:42, s:8,  c:'#ffffff', o:0.85},
+    {x:22, y:58, s:6,  c:'#ff80c8', o:0.55},
+    {x:76, y:52, s:8,  c:'#FFE8F4', o:0.7},
+    {x:4,  y:68, s:9,  c:'#ffffff', o:0.8},
+    {x:92, y:65, s:7,  c:'#ff80c8', o:0.6},
+    {x:38, y:72, s:8,  c:'#FFE8F4', o:0.75},
+    {x:62, y:78, s:6,  c:'#ffffff', o:0.9},
+    {x:15, y:82, s:8,  c:'#ff80c8', o:0.55},
+    {x:48, y:88, s:9,  c:'#FFE8F4', o:0.8},
+    {x:80, y:85, s:7,  c:'#ffffff', o:0.85},
+    {x:96, y:92, s:8,  c:'#ff80c8', o:0.6},
+  ];
+
+  stars.forEach(({x, y, s, c, o}) => {
+    const el = document.createElement('span');
+    el.className = 'star';
+    el.textContent = '★';
+    el.style.cssText = `left:${x}%;top:${y}%;font-size:${s}px;color:${c};opacity:${o};`;
+    document.body.appendChild(el);
+  });
+
+  // Licznik
+  const target = new Date('2026-10-29T00:00:00');
+  const prev = { d:'--', h:'--', m:'--', s:'--' };
+
+  function pad(n) { return String(n).padStart(2,'0'); }
+
+  function setDigit(id, char) {
+    const el = document.getElementById(id);
+    if (el && el.textContent !== char) {
+      el.textContent = char;
+      el.classList.remove('flip');
+      void el.offsetWidth;
+      el.classList.add('flip');
+    }
+  }
+
+  function tick() {
+    const now = new Date();
+    const diff = target - now;
+    if (diff <= 0) return;
+
+    const totalSec = Math.floor(diff / 1000);
+    const days    = Math.floor(totalSec / 86400);
+    const hours   = Math.floor((totalSec % 86400) / 3600);
+    const minutes = Math.floor((totalSec % 3600) / 60);
+    const seconds = totalSec % 60;
+
+    const d = pad(days), h = pad(hours), m = pad(minutes), s = pad(seconds);
+
+    if (d !== prev.d) { setDigit('d0', d[0]); setDigit('d1', d[1]); prev.d = d; }
+    if (h !== prev.h) { setDigit('h0', h[0]); setDigit('h1', h[1]); prev.h = h; }
+    if (m !== prev.m) { setDigit('m0', m[0]); setDigit('m1', m[1]); prev.m = m; }
+    if (s !== prev.s) { setDigit('s0', s[0]); setDigit('s1', s[1]); prev.s = s; }
+  }
+
+  tick();
+  setInterval(tick, 1000);
+</script>
+</body>
+</html>
