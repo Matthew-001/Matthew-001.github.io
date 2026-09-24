@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sto lat</title>
+  <title>Coś się szykuje..</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:        #0D0810;
-      --bg-mid:    #1a0d18;
+      --bg:        #3d1035;
+      --bg-mid:    #4a1540;
       --pink:      #FF2D9B;
       --pink-soft: #ff80c8;
       --cream:     #FFE8F4;
@@ -23,6 +23,7 @@
       color: var(--cream);
       font-family: 'Inter', sans-serif;
       overflow-x: hidden;
+      position: relative;
     }
 
     body::before {
@@ -34,19 +35,17 @@
       z-index: 0;
     }
 
-    /* Gwiazdki generowane przez JS — każda to span absolutnie pozycjonowany */
     .star {
       position: fixed;
       pointer-events: none;
       z-index: 0;
-      font-size: 10px;
       line-height: 1;
       user-select: none;
     }
 
     /* Świeczka */
     .candle-wrap {
-      position: fixed;
+      position: absolute;
       top: 20px;
       left: 50%;
       transform: translateX(-50%);
@@ -78,11 +77,7 @@
       animation: flickerGlow 1.8s ease-in-out infinite alternate;
     }
 
-    .wick {
-      width: 2px;
-      height: 6px;
-      background: #555;
-    }
+    .wick { width: 2px; height: 6px; background: #555; }
 
     .candle-body {
       width: 14px;
@@ -104,7 +99,7 @@
     }
 
     .candle-light {
-      position: fixed;
+      position: absolute;
       top: 0; left: 50%;
       transform: translateX(-50%);
       width: 200px;
@@ -159,10 +154,7 @@
       line-height: 1.25;
     }
 
-    .header h1 em {
-      font-style: italic;
-      color: var(--cream);
-    }
+    .header h1 em { font-style: italic; color: var(--cream); }
 
     .board {
       background: var(--bg-mid);
@@ -175,13 +167,7 @@
       box-shadow: 0 0 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,45,155,0.12);
     }
 
-    .unit {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-
+    .unit { display: flex; flex-direction: column; align-items: center; gap: 10px; }
     .unit-digits { display: flex; gap: 4px; }
 
     .digit {
@@ -247,9 +233,96 @@
       line-height: 1.8;
     }
 
+    /* Przyciski */
+    .btn-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      max-width: 340px;
+    }
+
+    .hint-btn {
+      display: none;
+      width: 100%;
+      padding: 14px 24px;
+      background: transparent;
+      border: 1px solid rgba(255,45,155,0.4);
+      border-radius: 6px;
+      color: var(--cream);
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-style: normal;
+      font-weight: 400;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      text-align: center;
+      letter-spacing: 0.03em;
+    }
+
+    .hint-btn:hover {
+      background: rgba(255,45,155,0.12);
+      border-color: var(--pink);
+    }
+
+    .hint-btn.visible { display: block; animation: fadeIn 0.6s ease; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Popup / modal */
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .popup-overlay.open { display: flex; }
+
+    .popup {
+      background: var(--bg-mid);
+      border: 1px solid rgba(255,45,155,0.3);
+      border-radius: 10px;
+      padding: 28px 28px 24px;
+      max-width: 360px;
+      width: fit-content;
+      min-width: 200px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 0 60px rgba(0,0,0,0.8);
+    }
+
+    .popup p {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1.7;
+    }
+
+
+
+
+
     @media (max-width: 520px) {
-      .board { gap: 14px; padding: 22px 16px; }
-      .sep { font-size: 1.2rem; }
+      main { gap: 32px; padding: 90px 12px 40px; }
+      .board { gap: 8px; padding: 18px 12px; }
+      .digit { width: 36px; height: 52px; font-size: 1.6rem; }
+      .unit-digits { gap: 3px; }
+      .unit { gap: 6px; }
+      .unit-label { font-size: 8px; letter-spacing: 0.1em; }
+      .sep { font-size: 1.1rem; padding-bottom: 14px; }
+      .header h1 { font-size: 1.8rem; }
+      .footer-text { font-size: 0.9rem; }
+      .popup { padding: 24px 20px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -311,71 +384,81 @@
     </div>
   </div>
 
-  <p class="footer-text">Wszystkiego dobrego życzymy, życzymy,<br>i zdrowia, i szczęścia,<br>i błogosławieństwa<br>przez ręce Maryi.</p>
+  <div id="bottom-section">
+    <p class="footer-text" id="footer-text">Wszystkiego dobrego życzymy, życzymy,<br>i zdrowia, i szczęścia,<br>i błogosławieństwa<br>przez ręce Maryi.</p>
 
-  <!-- PRZYCISKI — pojawiają się gdy licznik osiągnie dany próg -->
-
-  <!-- PRZYCISK 1 — pojawia się przy 30 dniach
-       tekst przycisku: "o matko to już 30 dni..."
-       popup: [do uzupełnienia]
-  -->
-
-  <!-- PRZYCISK 2 — pojawia się przy 25 dniach
-       tekst przycisku: "czy już czujesz się staro?"
-       popup: [do uzupełnienia]
-  -->
-
-  <!-- PRZYCISK 3 — pojawia się przy 20 dniach
-       tekst przycisku: "słyszysz to?"
-       popup: [do uzupełnienia]
-  -->
-
-  <!-- PRZYCISK 4 — pojawia się przy 15 dniach
-       tekst przycisku: "tak ja też to słyszę?"
-       popup: [do uzupełnienia]
-  -->
-
-  <!-- PRZYCISK 5 — pojawia się przy 10 dniach
-       tekst przycisku: "omg to chyba pociąg"
-       popup: [do uzupełnienia]
-  -->
-
-  <!-- PRZYCISK 6 — pojawia się przy 5 dniach
-       tekst przycisku: "niesamowite! wsiadamy!"
-       popup: [do uzupełnienia]
-  -->
+    <div class="btn-wrap" id="btn-wrap" style="display:none;">
+      <button class="hint-btn" id="btn1" onclick="openPopup('popup1')">O kurcze.. 30 dni</button>
+      <button class="hint-btn" id="btn2" onclick="openPopup('popup2')">Czy już czujesz się staro?</button>
+      <button class="hint-btn" id="btn3" onclick="openPopup('popup3')">Ej ej.. słyszysz to?</button>
+      <button class="hint-btn" id="btn4" onclick="openPopup('popup4')">Stuk jest coraz głośniejszy</button>
+      <button class="hint-btn" id="btn5" onclick="openPopup('popup5')">Taak!! To pociąg</button>
+      <button class="hint-btn" id="btn6" onclick="openPopup('popup6')">Niesamowite, wsiadamy!!</button>
+    </div>
+  </div>
 </main>
 
-<script>
-  // 24 gwiazdki — pozycje losowe ale ustalone
-  const stars = [
-    {x:5,  y:8,  s:9,  c:'#FFE8F4', o:0.85},
-    {x:18, y:4,  s:7,  c:'#ffffff', o:0.9},
-    {x:32, y:9,  s:8,  c:'#ff80c8', o:0.6},
-    {x:47, y:5,  s:10, c:'#FFE8F4', o:0.8},
-    {x:63, y:7,  s:7,  c:'#ffffff', o:0.95},
-    {x:78, y:3,  s:8,  c:'#ff80c8', o:0.55},
-    {x:91, y:9,  s:9,  c:'#FFE8F4', o:0.8},
-    {x:97, y:18, s:7,  c:'#ffffff', o:0.9},
-    {x:3,  y:28, s:8,  c:'#ff80c8', o:0.6},
-    {x:13, y:22, s:6,  c:'#FFE8F4', o:0.7},
-    {x:55, y:15, s:7,  c:'#ffffff', o:0.85},
-    {x:85, y:22, s:9,  c:'#ff80c8', o:0.55},
-    {x:8,  y:48, s:7,  c:'#FFE8F4', o:0.75},
-    {x:95, y:42, s:8,  c:'#ffffff', o:0.85},
-    {x:22, y:58, s:6,  c:'#ff80c8', o:0.55},
-    {x:76, y:52, s:8,  c:'#FFE8F4', o:0.7},
-    {x:4,  y:68, s:9,  c:'#ffffff', o:0.8},
-    {x:92, y:65, s:7,  c:'#ff80c8', o:0.6},
-    {x:38, y:72, s:8,  c:'#FFE8F4', o:0.75},
-    {x:62, y:78, s:6,  c:'#ffffff', o:0.9},
-    {x:15, y:82, s:8,  c:'#ff80c8', o:0.55},
-    {x:48, y:88, s:9,  c:'#FFE8F4', o:0.8},
-    {x:80, y:85, s:7,  c:'#ffffff', o:0.85},
-    {x:96, y:92, s:8,  c:'#ff80c8', o:0.6},
-  ];
 
-  stars.forEach(({x, y, s, c, o}) => {
+<div class="popup-overlay" id="popup1">
+  <div class="popup">
+    <p>Kocham Cię</p>
+    
+  </div>
+</div>
+
+<div class="popup-overlay" id="popup2">
+  <div class="popup">
+    <p>No przecież dostałaś cukierka w kościele.. to chyba jeszcze nie</p>
+    
+  </div>
+</div>
+
+<div class="popup-overlay" id="popup3">
+  <div class="popup">
+    <p>Taki jakby powtarzający się stuk..</p>
+    
+  </div>
+</div>
+
+<div class="popup-overlay" id="popup4">
+  <div class="popup">
+    <p>Chyba coś widać.. ile dymu!</p>
+    
+  </div>
+</div>
+
+<div class="popup-overlay" id="popup5">
+  <div class="popup">
+    <p>Ciekawe gdzie jedzie??</p>
+    
+  </div>
+</div>
+
+<div class="popup-overlay" id="popup6">
+  <div class="popup">
+    <p>Pośpiesz się!! Nie mamy czasu, zaraz odjedzie!!!</p>
+    
+  </div>
+</div>
+
+
+
+<script>
+  const stars = [
+    {x:5,y:8,s:9,c:'#FFE8F4',o:0.85},{x:18,y:4,s:7,c:'#ffffff',o:0.9},
+    {x:32,y:9,s:8,c:'#ff80c8',o:0.6},{x:47,y:5,s:10,c:'#FFE8F4',o:0.8},
+    {x:63,y:7,s:7,c:'#ffffff',o:0.95},{x:78,y:3,s:8,c:'#ff80c8',o:0.55},
+    {x:91,y:9,s:9,c:'#FFE8F4',o:0.8},{x:97,y:18,s:7,c:'#ffffff',o:0.9},
+    {x:3,y:28,s:8,c:'#ff80c8',o:0.6},{x:13,y:22,s:6,c:'#FFE8F4',o:0.7},
+    {x:55,y:15,s:7,c:'#ffffff',o:0.85},{x:85,y:22,s:9,c:'#ff80c8',o:0.55},
+    {x:8,y:48,s:7,c:'#FFE8F4',o:0.75},{x:95,y:42,s:8,c:'#ffffff',o:0.85},
+    {x:22,y:58,s:6,c:'#ff80c8',o:0.55},{x:76,y:52,s:8,c:'#FFE8F4',o:0.7},
+    {x:4,y:68,s:9,c:'#ffffff',o:0.8},{x:92,y:65,s:7,c:'#ff80c8',o:0.6},
+    {x:38,y:72,s:8,c:'#FFE8F4',o:0.75},{x:62,y:78,s:6,c:'#ffffff',o:0.9},
+    {x:15,y:82,s:8,c:'#ff80c8',o:0.55},{x:48,y:88,s:9,c:'#FFE8F4',o:0.8},
+    {x:80,y:85,s:7,c:'#ffffff',o:0.85},{x:96,y:92,s:8,c:'#ff80c8',o:0.6},
+  ];
+  stars.forEach(({x,y,s,c,o}) => {
     const el = document.createElement('span');
     el.className = 'star';
     el.textContent = '★';
@@ -383,8 +466,46 @@
     document.body.appendChild(el);
   });
 
-  // Licznik
-  const target = new Date('2026-10-29T00:00:00');
+  function openPopup(id) { document.getElementById(id).classList.add('open'); }
+  function closePopup(id) { document.getElementById(id).classList.remove('open'); }
+
+  document.querySelectorAll('.popup-overlay').forEach(el => {
+    el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
+  });
+
+  const btnThresholds = [
+    { id: 'btn1', days: 30 },
+    { id: 'btn2', days: 25 },
+    { id: 'btn3', days: 20 },
+    { id: 'btn4', days: 15 },
+    { id: 'btn5', days: 10 },
+    { id: 'btn6', days: 5  },
+  ];
+
+  function updateButtons(daysLeft) {
+    let activeId = null;
+    for (let i = 0; i < btnThresholds.length; i++) {
+      const curr = btnThresholds[i];
+      const next = btnThresholds[i + 1];
+      if (daysLeft <= curr.days) {
+        if (!next || daysLeft > next.days) {
+          activeId = curr.id;
+          break;
+        }
+      }
+    }
+    if (!activeId) return;
+
+    document.getElementById('footer-text').style.display = 'none';
+    document.getElementById('btn-wrap').style.display = 'flex';
+
+    btnThresholds.forEach(({ id }) => {
+      document.getElementById(id).classList.remove('visible');
+    });
+    document.getElementById(activeId).classList.add('visible');
+  }
+
+  const target = new Date('2026-10-28T23:00:00Z');
   const prev = { d:'--', h:'--', m:'--', s:'--' };
 
   function pad(n) { return String(n).padStart(2,'0'); }
@@ -416,6 +537,8 @@
     if (h !== prev.h) { setDigit('h0', h[0]); setDigit('h1', h[1]); prev.h = h; }
     if (m !== prev.m) { setDigit('m0', m[0]); setDigit('m1', m[1]); prev.m = m; }
     if (s !== prev.s) { setDigit('s0', s[0]); setDigit('s1', s[1]); prev.s = s; }
+
+    updateButtons(days);
   }
 
   tick();
