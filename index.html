@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Coś się szykuje..</title>
+  <title>Coś wyjątkowego...</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -135,6 +135,32 @@
       gap: 48px;
     }
 
+    .center-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 48px;
+    }
+
+    #bottom-section {
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Przyciski podpowiedzi */
+    .btn-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 340px;
+      height: 120px;
+    }
+
     .header { text-align: center; }
 
     .header-eyebrow {
@@ -231,21 +257,12 @@
       font-style: italic;
       max-width: 400px;
       line-height: 1.8;
-    }
-
-    /* Przyciski */
-    .btn-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-      width: 100%;
-      max-width: 340px;
+      margin: 0;
     }
 
     .hint-btn {
       display: none;
-      width: 100%;
+      width: 300px;
       padding: 14px 24px;
       background: transparent;
       border: 1px solid rgba(255,45,155,0.4);
@@ -261,11 +278,7 @@
       letter-spacing: 0.03em;
     }
 
-    .hint-btn:hover {
-      background: rgba(255,45,155,0.12);
-      border-color: var(--pink);
-    }
-
+    .hint-btn:hover { background: rgba(255,45,155,0.12); border-color: var(--pink); }
     .hint-btn.visible { display: block; animation: fadeIn 0.6s ease; }
 
     @keyframes fadeIn {
@@ -273,7 +286,6 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* Popup / modal */
     .popup-overlay {
       display: none;
       position: fixed;
@@ -307,10 +319,6 @@
       color: var(--cream);
       line-height: 1.7;
     }
-
-
-
-
 
     @media (max-width: 520px) {
       main { gap: 32px; padding: 90px 12px 40px; }
@@ -350,98 +358,74 @@
     <h1>Oj Agatko<em>..</em></h1>
   </div>
 
-  <div class="board" id="board">
-    <div class="unit">
-      <div class="unit-digits">
-        <div class="digit" id="d0">0</div>
-        <div class="digit" id="d1">0</div>
+  <div class="center-block">
+    <div class="board" id="board">
+      <div class="unit">
+        <div class="unit-digits">
+          <div class="digit" id="d0">0</div>
+          <div class="digit" id="d1">0</div>
+        </div>
+        <span class="unit-label">dni</span>
       </div>
-      <span class="unit-label">dni</span>
-    </div>
-    <span class="sep">:</span>
-    <div class="unit">
-      <div class="unit-digits">
-        <div class="digit" id="h0">0</div>
-        <div class="digit" id="h1">0</div>
+      <span class="sep">:</span>
+      <div class="unit">
+        <div class="unit-digits">
+          <div class="digit" id="h0">0</div>
+          <div class="digit" id="h1">0</div>
+        </div>
+        <span class="unit-label">godzin</span>
       </div>
-      <span class="unit-label">godzin</span>
-    </div>
-    <span class="sep">:</span>
-    <div class="unit">
-      <div class="unit-digits">
-        <div class="digit" id="m0">0</div>
-        <div class="digit" id="m1">0</div>
+      <span class="sep">:</span>
+      <div class="unit">
+        <div class="unit-digits">
+          <div class="digit" id="m0">0</div>
+          <div class="digit" id="m1">0</div>
+        </div>
+        <span class="unit-label">minut</span>
       </div>
-      <span class="unit-label">minut</span>
-    </div>
-    <span class="sep">:</span>
-    <div class="unit">
-      <div class="unit-digits">
-        <div class="digit" id="s0">0</div>
-        <div class="digit" id="s1">0</div>
+      <span class="sep">:</span>
+      <div class="unit">
+        <div class="unit-digits">
+          <div class="digit" id="s0">0</div>
+          <div class="digit" id="s1">0</div>
+        </div>
+        <span class="unit-label">sekund</span>
       </div>
-      <span class="unit-label">sekund</span>
     </div>
-  </div>
 
-  <div id="bottom-section">
-    <p class="footer-text" id="footer-text">Wszystkiego dobrego życzymy, życzymy,<br>i zdrowia, i szczęścia,<br>i błogosławieństwa<br>przez ręce Maryi.</p>
+    <div id="bottom-section">
+      <p class="footer-text" id="footer-text">Wszystkiego dobrego życzymy, życzymy,<br>i zdrowia, i szczęścia,<br>i błogosławieństwa<br>przez ręce Maryi.</p>
 
-    <div class="btn-wrap" id="btn-wrap" style="display:none;">
-      <button class="hint-btn" id="btn1" onclick="openPopup('popup1')">O kurcze.. 30 dni</button>
-      <button class="hint-btn" id="btn2" onclick="openPopup('popup2')">Czy już czujesz się staro?</button>
-      <button class="hint-btn" id="btn3" onclick="openPopup('popup3')">Ej ej.. słyszysz to?</button>
-      <button class="hint-btn" id="btn4" onclick="openPopup('popup4')">Stuk jest coraz głośniejszy</button>
-      <button class="hint-btn" id="btn5" onclick="openPopup('popup5')">Taak!! To pociąg</button>
-      <button class="hint-btn" id="btn6" onclick="openPopup('popup6')">Niesamowite, wsiadamy!!</button>
+      <div class="btn-wrap" id="btn-wrap" style="display:none;">
+        <button class="hint-btn" id="btn1" onclick="openPopup('popup1')">O kurcze.. 30 dni</button>
+        <button class="hint-btn" id="btn2" onclick="openPopup('popup2')">Czy już czujesz się staro?</button>
+        <button class="hint-btn" id="btn3" onclick="openPopup('popup3')">Ej ej.. słyszysz to?</button>
+        <button class="hint-btn" id="btn4" onclick="openPopup('popup4')">Stuk jest coraz głośniejszy</button>
+        <button class="hint-btn" id="btn5" onclick="openPopup('popup5')">Taak!! To pociąg</button>
+        <button class="hint-btn" id="btn6" onclick="openPopup('popup6')">Niesamowite, wsiadamy!!</button>
+      </div>
     </div>
   </div>
 </main>
 
-
 <div class="popup-overlay" id="popup1">
-  <div class="popup">
-    <p>Kocham Cię</p>
-    
-  </div>
+  <div class="popup"><p>Kocham Cię aniołku<br>Ale wiesz, że to ja co nie? hihi</p></div>
 </div>
-
 <div class="popup-overlay" id="popup2">
-  <div class="popup">
-    <p>No przecież dostałaś cukierka w kościele.. to chyba jeszcze nie</p>
-    
-  </div>
+  <div class="popup"><p>No przecież dostałaś cukierka w kościele.. to chyba jeszcze nie<br>A poza tym piękna i młoda</p></div>
 </div>
-
 <div class="popup-overlay" id="popup3">
-  <div class="popup">
-    <p>Taki jakby powtarzający się stuk..</p>
-    
-  </div>
+  <div class="popup"><p>Taki jakby powtarzający się stuk..</p></div>
 </div>
-
 <div class="popup-overlay" id="popup4">
-  <div class="popup">
-    <p>Chyba coś widać.. ile dymu!</p>
-    
-  </div>
+  <div class="popup"><p>Chyba coś widać.. ile dymu!</p></div>
 </div>
-
 <div class="popup-overlay" id="popup5">
-  <div class="popup">
-    <p>Ciekawe gdzie jedzie??</p>
-    
-  </div>
+  <div class="popup"><p>Ciekawe gdzie jedzie??</p></div>
 </div>
-
 <div class="popup-overlay" id="popup6">
-  <div class="popup">
-    <p>Pośpiesz się!! Nie mamy czasu, zaraz odjedzie!!!</p>
-    
-  </div>
+  <div class="popup"><p>Pośpiesz się!! Nie mamy czasu, zaraz odjedzie!!!</p></div>
 </div>
-
-
 
 <script>
   const stars = [
@@ -467,8 +451,6 @@
   });
 
   function openPopup(id) { document.getElementById(id).classList.add('open'); }
-  function closePopup(id) { document.getElementById(id).classList.remove('open'); }
-
   document.querySelectorAll('.popup-overlay').forEach(el => {
     el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
   });
@@ -488,25 +470,21 @@
       const curr = btnThresholds[i];
       const next = btnThresholds[i + 1];
       if (daysLeft <= curr.days) {
-        if (!next || daysLeft > next.days) {
-          activeId = curr.id;
-          break;
-        }
+        if (!next || daysLeft > next.days) { activeId = curr.id; break; }
       }
     }
     if (!activeId) return;
-
     document.getElementById('footer-text').style.display = 'none';
     document.getElementById('btn-wrap').style.display = 'flex';
-
-    btnThresholds.forEach(({ id }) => {
-      document.getElementById(id).classList.remove('visible');
-    });
+    btnThresholds.forEach(({ id }) => document.getElementById(id).classList.remove('visible'));
     document.getElementById(activeId).classList.add('visible');
   }
 
+
   const target = new Date('2026-10-28T23:00:00Z');
   const prev = { d:'--', h:'--', m:'--', s:'--' };
+  let countdownDone = false;
+  let countdownInterval = null;
 
   function pad(n) { return String(n).padStart(2,'0'); }
 
@@ -521,9 +499,21 @@
   }
 
   function tick() {
+    if (countdownDone) return;
+
     const now = new Date();
     const diff = target - now;
-    if (diff <= 0) return;
+
+    if (diff <= 0) {
+      setDigit('d0', '0'); setDigit('d1', '0');
+      setDigit('h0', '0'); setDigit('h1', '0');
+      setDigit('m0', '0'); setDigit('m1', '0');
+      setDigit('s0', '0'); setDigit('s1', '0');
+      updateButtons(0);
+      countdownDone = true;
+      if (countdownInterval) clearInterval(countdownInterval);
+      return;
+    }
 
     const totalSec = Math.floor(diff / 1000);
     const days    = Math.floor(totalSec / 86400);
@@ -542,7 +532,7 @@
   }
 
   tick();
-  setInterval(tick, 1000);
+  countdownInterval = setInterval(tick, 1000);
 </script>
 </body>
 </html>
