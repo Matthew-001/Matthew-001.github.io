@@ -395,12 +395,20 @@
       <p class="footer-text" id="footer-text">Wszystkiego dobrego życzymy, życzymy,<br>i zdrowia, i szczęścia,<br>i błogosławieństwa<br>przez ręce Maryi.</p>
 
       <div class="btn-wrap" id="btn-wrap" style="display:none;">
-        <button class="hint-btn" id="btn1" onclick="openPopup('popup1')">O kurcze.. 30 dni</button>
-        <button class="hint-btn" id="btn2" onclick="openPopup('popup2')">Czy już czujesz się staro?</button>
-        <button class="hint-btn" id="btn3" onclick="openPopup('popup3')">Ej ej.. słyszysz to?</button>
-        <button class="hint-btn" id="btn4" onclick="openPopup('popup4')">Stuk jest coraz głośniejszy</button>
-        <button class="hint-btn" id="btn5" onclick="openPopup('popup5')">Taak!! To pociąg</button>
-        <button class="hint-btn" id="btn6" onclick="openPopup('popup6')">Niesamowite, wsiadamy!!</button>
+        <button class="hint-btn" id="btn1"  onclick="openPopup('popup1')">O kurcze.. 30 dni</button>
+        <button class="hint-btn" id="btn2"  onclick="openPopup('popup2')">Czy już czujesz się staro?</button>
+        <button class="hint-btn" id="btn3"  onclick="openPopup('popup3')">Ej ej.. słyszysz to?</button>
+        <button class="hint-btn" id="btn4"  onclick="openPopup('popup4')">Stuk jest coraz głośniejszy</button>
+        <button class="hint-btn" id="btn5"  onclick="openPopup('popup5')">Przypatrz się temu..</button>
+        <button class="hint-btn" id="btn6"  onclick="openPopup('popup6')">Widać światła..</button>
+        <button class="hint-btn" id="btn7"  onclick="openPopup('popup7')">I jeszcze trąbi..</button>
+        <button class="hint-btn" id="btn8"  onclick="openPopup('popup8')">No tak oczywiście..</button>
+        <button class="hint-btn" id="btn9"  onclick="openPopup('popup9')">No mam nadzieję, że już wiesz</button>
+        <button class="hint-btn" id="btn10" onclick="openPopup('popup10')">Wiesz co teraz będziemy robić..</button>
+        <button class="hint-btn" id="btn11" onclick="openPopup('popup11')">O kurcze, tak blisko</button>
+        <button class="hint-btn" id="btn12" onclick="openPopup('popup12')">Ten pociąg..</button>
+        <button class="hint-btn" id="btn13" onclick="openPopup('popup13')">Nie mamy czasu, szybko Agatko!!!</button>
+        <button class="hint-btn" id="btn14" onclick="openPopup('popup14')">WSIADAMY!</button>
       </div>
     </div>
   </div>
@@ -419,10 +427,34 @@
   <div class="popup"><p>Chyba coś widać.. ile dymu!</p></div>
 </div>
 <div class="popup-overlay" id="popup5">
-  <div class="popup"><p>Ciekawe gdzie jedzie?? Jak uważasz??</p></div>
+  <div class="popup"><p>Taki znajomy kształt</p></div>
 </div>
 <div class="popup-overlay" id="popup6">
-  <div class="popup"><p>Pośpiesz się!! Nie mamy czasu, zaraz odjedzie!!!</p></div>
+  <div class="popup"><p>Ale mocno świecą</p></div>
+</div>
+<div class="popup-overlay" id="popup7">
+  <div class="popup"><p>Ale głośno</p></div>
+</div>
+<div class="popup-overlay" id="popup8">
+  <div class="popup"><p>I co wiesz już co to jest??</p></div>
+</div>
+<div class="popup-overlay" id="popup9">
+  <div class="popup"><p>TAAAK, TO POCIĄG!!</p></div>
+</div>
+<div class="popup-overlay" id="popup10">
+  <div class="popup"><p>O kurcze, serio wiesz?</p></div>
+</div>
+<div class="popup-overlay" id="popup11">
+  <div class="popup"><p>Tyle niespodzianek..</p></div>
+</div>
+<div class="popup-overlay" id="popup12">
+  <div class="popup"><p>Przecież on zaraz odjeżdża!!</p></div>
+</div>
+<div class="popup-overlay" id="popup13">
+  <div class="popup"><p>Pośpieszmy się!!</p></div>
+</div>
+<div class="popup-overlay" id="popup14">
+  <div class="popup"><p>Tylko gdzie on jedzie..</p></div>
 </div>
 
 <script>
@@ -454,12 +486,20 @@
   });
 
   const btnThresholds = [
-    { id: 'btn1', days: 30 },
-    { id: 'btn2', days: 25 },
-    { id: 'btn3', days: 20 },
-    { id: 'btn4', days: 15 },
-    { id: 'btn5', days: 10 },
-    { id: 'btn6', days: 5  },
+    { id: 'btn1',  days: 30 },
+    { id: 'btn2',  days: 25 },
+    { id: 'btn3',  days: 20 },
+    { id: 'btn4',  days: 15 },
+    { id: 'btn5',  days: 10 },
+    { id: 'btn6',  days: 9  },
+    { id: 'btn7',  days: 8  },
+    { id: 'btn8',  days: 7  },
+    { id: 'btn9',  days: 6  },
+    { id: 'btn10', days: 5  },
+    { id: 'btn11', days: 4  },
+    { id: 'btn12', days: 3  },
+    { id: 'btn13', days: 2  },
+    { id: 'btn14', days: 1  },
   ];
 
   function updateButtons(daysLeft) {
