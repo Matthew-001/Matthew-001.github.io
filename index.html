@@ -402,12 +402,12 @@
         <button class="hint-btn" id="btn5"  onclick="openPopup('popup5')">Przypatrz się temu..</button>
         <button class="hint-btn" id="btn6"  onclick="openPopup('popup6')">Widać światła..</button>
         <button class="hint-btn" id="btn7"  onclick="openPopup('popup7')">I jeszcze trąbi..</button>
-        <button class="hint-btn" id="btn8"  onclick="openPopup('popup8')">No tak oczywiście..</button>
-        <button class="hint-btn" id="btn9"  onclick="openPopup('popup9')">No mam nadzieję, że już wiesz</button>
-        <button class="hint-btn" id="btn10" onclick="openPopup('popup10')">Wiesz co teraz będziemy robić..</button>
+        <button class="hint-btn" id="btn8"  onclick="openPopup('popup8')">No tak, oczywiście..</button>
+        <button class="hint-btn" id="btn9"  onclick="openPopup('popup9')">No, mam nadzieję, że już wiesz</button>
+        <button class="hint-btn" id="btn10" onclick="openPopup('popup10')">Wiesz, co teraz będziemy robić..</button>
         <button class="hint-btn" id="btn11" onclick="openPopup('popup11')">O kurcze, tak blisko</button>
         <button class="hint-btn" id="btn12" onclick="openPopup('popup12')">Ten pociąg..</button>
-        <button class="hint-btn" id="btn13" onclick="openPopup('popup13')">Nie mamy czasu, szybko Agatko!!!</button>
+        <button class="hint-btn" id="btn13" onclick="openPopup('popup13')">Nie mamy czasu, szybko, Agatko!!!</button>
         <button class="hint-btn" id="btn14" onclick="openPopup('popup14')">WSIADAMY!</button>
       </div>
     </div>
@@ -436,7 +436,7 @@
   <div class="popup"><p>Ale głośno</p></div>
 </div>
 <div class="popup-overlay" id="popup8">
-  <div class="popup"><p>I co wiesz już co to jest??</p></div>
+  <div class="popup"><p>I co, wiesz już, co to jest??</p></div>
 </div>
 <div class="popup-overlay" id="popup9">
   <div class="popup"><p>TAAAK, TO POCIĄG!!</p></div>
@@ -502,7 +502,16 @@
     { id: 'btn14', days: 1  },
   ];
 
-  function updateButtons(daysLeft) {
+  function calendarDaysLeft() {
+    const now = new Date();
+    const todayPL = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const targetPL = new Date(2026, 9, 29);
+    const msLeft = targetPL - todayPL;
+    return Math.max(0, Math.floor(msLeft / 86400000));
+  }
+
+  function updateButtons() {
+    const daysLeft = calendarDaysLeft();
     let activeId = null;
     for (let i = 0; i < btnThresholds.length; i++) {
       const curr = btnThresholds[i];
@@ -517,7 +526,6 @@
     btnThresholds.forEach(({ id }) => document.getElementById(id).classList.remove('visible'));
     document.getElementById(activeId).classList.add('visible');
   }
-
 
   const target = new Date('2026-10-28T23:00:00Z');
   const prev = { d:'--', h:'--', m:'--', s:'--' };
@@ -547,7 +555,7 @@
       setDigit('h0', '0'); setDigit('h1', '0');
       setDigit('m0', '0'); setDigit('m1', '0');
       setDigit('s0', '0'); setDigit('s1', '0');
-      updateButtons(0);
+      updateButtons();
       countdownDone = true;
       if (countdownInterval) clearInterval(countdownInterval);
       return;
@@ -566,7 +574,7 @@
     if (m !== prev.m) { setDigit('m0', m[0]); setDigit('m1', m[1]); prev.m = m; }
     if (s !== prev.s) { setDigit('s0', s[0]); setDigit('s1', s[1]); prev.s = s; }
 
-    updateButtons(days);
+    updateButtons();
   }
 
   tick();
