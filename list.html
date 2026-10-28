@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coś się szykuje ding dong...</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&family=Caveat+Brush&family=Kalam:wght@400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #3d1035;
+      --bg-mid:    #4a1540;
+      --pink:      #FF2D9B;
+      --pink-soft: #ff80c8;
+      --cream:     #FFE8F4;
+      --muted:     #8B5070;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 40%, rgba(255,45,155,0.07) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .star {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      line-height: 1;
+      user-select: none;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 90px 20px 60px;
+      gap: 40px;
+    }
+
+    .header { text-align: center; }
+
+    .header-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      color: var(--pink-soft);
+      margin-bottom: 16px;
+      opacity: 0.7;
+    }
+
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1.25;
+    }
+
+    .header h1 em { font-style: italic; color: var(--cream); }
+
+    .letter {
+      position: relative;
+      width: 100%;
+      max-width: 520px;
+      background: #fff4e8;
+      color: #3d1035;
+      border-radius: 4px;
+      padding: 2.1rem 28px 2.1rem 58px;
+      box-shadow: 0 0 60px rgba(0,0,0,0.6), 0 2px 0 rgba(255,255,255,0.4) inset;
+      transform: rotate(-0.4deg);
+      animation: fadeIn 1s ease;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent calc(2.1rem - 1px),
+        rgba(255,45,155,0.18) calc(2.1rem - 1px),
+        rgba(255,45,155,0.18) 2.1rem
+      );
+    }
+
+    .letter::before {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 42px;
+      width: 1px;
+      background: rgba(255,45,155,0.35);
+    }
+
+    .letter p {
+      font-family: 'Caveat Brush', 'Kalam', 'Segoe Script', cursive;
+      font-size: 1.5rem;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      line-height: 2.1rem;
+      color: #3d1035;
+    }
+
+    .letter .ln { display: block; transform-origin: left center; }
+    .letter .date, .letter .sign { text-align: right; transform-origin: right center; }
+    .letter .heart { color: #FF2D9B; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px) rotate(-0.4deg); }
+      to   { opacity: 1; transform: translateY(0)   rotate(-0.4deg); }
+    }
+
+    @media (max-width: 520px) {
+      main { padding: 50px 12px 40px; gap: 28px; }
+      .header h1 { font-size: 1.8rem; }
+      .letter { padding: 2.1rem 16px 2.1rem 40px; }
+      .letter::before { left: 28px; }
+      .letter p { font-size: 1.3rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .letter { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+<main>
+  <div class="letter">
+    <p>
+<span class="ln date" style="transform:rotate(-0.4deg);">29.10.2026</span>
+<span class="ln">&nbsp;</span>
+<span class="ln" style="transform:translateX(0px) rotate(-0.3deg);">No i nastał ten piękny dzień, Twój dzień,</span>
+<span class="ln" style="transform:translateX(2px) rotate(0.2deg);">mam nadzieję, że śniadanie smakuje. Pewnie się zastanawiasz, czy jeszcze coś tu będzie, ale niestety to koniec zagadek na tej stronie..</span>
+<span class="ln" style="transform:translateX(1px) rotate(-0.25deg);">Teraz przenosimy wszystkie podpowiedzi jakie tu zastałaś do świata realnego.. Całe odliczanie było podpowiedzią do głównej atrakcji na którą pojedziemy za niedługo, ale zapewne ciekawią Cię jeszcze te cztery zdjęcia hihi. One również nie są tutaj przypadkowo.. Na razie ubierz się luźno, najlepiej w dresy, żeby było Ci wygodnie haha.</span>
+<span class="ln" style="transform:translateX(3px) rotate(0.3deg);">Spędzimy tam troszkę czasu i pojedziemy do domu, żebyś mogła się przebrać w ładniejsze ciuszki. A później pojedziemy coś zjeść, z małą niespodzianką. Wieczorem zaś pojedziemy troszkę dalej i mam nadzieje, że nam się to spodoba hihi</span>
+<span class="ln">&nbsp;</span>
+<span class="ln sign" style="transform:rotate(-0.8deg);">Mateusz <span class="heart">♥</span></span>
+    </p>
+  </div>
+</main>
+
+<script>
+  const stars = [
+    {x:5,y:8,s:9,c:'#FFE8F4',o:0.85},{x:18,y:4,s:7,c:'#ffffff',o:0.9},
+    {x:32,y:9,s:8,c:'#ff80c8',o:0.6},{x:47,y:5,s:10,c:'#FFE8F4',o:0.8},
+    {x:63,y:7,s:7,c:'#ffffff',o:0.95},{x:78,y:3,s:8,c:'#ff80c8',o:0.55},
+    {x:91,y:9,s:9,c:'#FFE8F4',o:0.8},{x:97,y:18,s:7,c:'#ffffff',o:0.9},
+    {x:3,y:28,s:8,c:'#ff80c8',o:0.6},{x:13,y:22,s:6,c:'#FFE8F4',o:0.7},
+    {x:55,y:15,s:7,c:'#ffffff',o:0.85},{x:85,y:22,s:9,c:'#ff80c8',o:0.55},
+    {x:8,y:48,s:7,c:'#FFE8F4',o:0.75},{x:95,y:42,s:8,c:'#ffffff',o:0.85},
+    {x:22,y:58,s:6,c:'#ff80c8',o:0.55},{x:76,y:52,s:8,c:'#FFE8F4',o:0.7},
+    {x:4,y:68,s:9,c:'#ffffff',o:0.8},{x:92,y:65,s:7,c:'#ff80c8',o:0.6},
+    {x:38,y:72,s:8,c:'#FFE8F4',o:0.75},{x:62,y:78,s:6,c:'#ffffff',o:0.9},
+    {x:15,y:82,s:8,c:'#ff80c8',o:0.55},{x:48,y:88,s:9,c:'#FFE8F4',o:0.8},
+    {x:80,y:85,s:7,c:'#ffffff',o:0.85},{x:96,y:92,s:8,c:'#ff80c8',o:0.6},
+  ];
+  stars.forEach(({x,y,s,c,o}) => {
+    const el = document.createElement('span');
+    el.className = 'star';
+    el.textContent = '★';
+    el.style.cssText = `left:${x}%;top:${y}%;font-size:${s}px;color:${c};opacity:${o};`;
+    document.body.appendChild(el);
+  });
+</script>
+</body>
+</html>

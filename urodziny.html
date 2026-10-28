@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Coś wyjątkowego...</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #3d1035;
+      --bg-mid:    #4a1540;
+      --pink:      #FF2D9B;
+      --pink-soft: #ff80c8;
+      --cream:     #FFE8F4;
+      --muted:     #8B5070;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 40%, rgba(255,45,155,0.07) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .star {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      line-height: 1;
+      user-select: none;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 90px 20px 60px;
+      gap: 44px;
+    }
+
+    .header { text-align: center; }
+
+    .header-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      color: var(--pink-soft);
+      margin-bottom: 16px;
+      opacity: 0.7;
+    }
+
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1.25;
+    }
+
+    .header h1 em { font-style: italic; color: var(--cream); }
+
+    /* KARUZELA ZDJĘĆ */
+    .carousel-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .carousel-viewport {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      border-radius: 8px;
+      background: var(--bg-mid);
+      border: 1px solid rgba(255,45,155,0.2);
+      box-shadow: 0 0 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,45,155,0.12);
+      aspect-ratio: 4 / 5;
+    }
+
+    .carousel-track {
+      display: flex;
+      height: 100%;
+      transition: transform 0.45s ease;
+    }
+
+    .slide {
+      flex: 0 0 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+    .slide .placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      background: linear-gradient(135deg, rgba(255,45,155,0.15), rgba(74,21,64,0.5));
+      color: var(--pink-soft);
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+    }
+
+    .arrow-btn {
+      flex-shrink: 0;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,45,155,0.4);
+      background: transparent;
+      color: var(--cream);
+      font-size: 1.3rem;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, border-color 0.2s, opacity 0.2s;
+    }
+
+    .arrow-btn:hover { background: rgba(255,45,155,0.12); border-color: var(--pink); }
+    .arrow-btn:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
+
+    .dots { display: flex; gap: 8px; }
+
+    .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(255,232,244,0.25);
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .dot.active { background: var(--pink); transform: scale(1.3); }
+
+    /* SEKCJA: ODPOWIEDŹ */
+    #video-section {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+      width: 100%;
+      max-width: 480px;
+      animation: fadeIn 0.8s ease;
+    }
+
+    #video-section.visible { display: flex; }
+
+    .question-text {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: var(--pink-soft);
+      text-align: center;
+      font-size: 1.05rem;
+    }
+
+    .back-link {
+      align-self: flex-start;
+      background: none;
+      border: none;
+      color: var(--pink-soft);
+      font-family: 'Inter', sans-serif;
+      font-size: 1.3rem;
+      opacity: 0.75;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .back-link:hover { opacity: 1; }
+
+    /* Kratki na odpowiedź — zawsze w jednej linii, dzielą całą szerokość */
+    .code-inputs {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 4px;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .code-box {
+      flex: 1 1 0;
+      min-width: 0;
+      height: clamp(48px, 10vw, 88px);
+      background: #0a0510;
+      border: 1px solid rgba(255,45,155,0.3);
+      border-radius: 3px;
+      text-align: center;
+      text-transform: uppercase;
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(0.95rem, 5vw, 1.8rem);
+      font-weight: 700;
+      color: var(--cream);
+      caret-color: var(--pink);
+      outline: none;
+      line-height: 1;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .code-box:focus {
+      border-color: var(--pink);
+      box-shadow: 0 0 12px rgba(255,45,155,0.25);
+    }
+
+    .code-box.error {
+      border-color: #ff4444;
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%      { transform: translateX(-6px); }
+      40%      { transform: translateX(6px); }
+      60%      { transform: translateX(-4px); }
+      80%      { transform: translateX(4px); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Chmurka z podpowiedzią — identyczna jak na stronie 1 */
+    .cloud-hint {
+      display: none;
+      background: var(--bg-mid);
+      border: 1px solid rgba(255,45,155,0.3);
+      border-radius: 16px;
+      padding: 16px 22px;
+      max-width: 320px;
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      color: var(--cream);
+      line-height: 1.6;
+      position: relative;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .cloud-hint::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-bottom-color: rgba(255,45,155,0.3);
+    }
+
+    .cloud-hint::after {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-bottom-color: var(--bg-mid);
+    }
+
+    .cloud-hint.visible { display: block; }
+
+    .circle-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 1px solid var(--pink);
+      color: var(--cream);
+      font-weight: 700;
+      margin-left: 2px;
+      vertical-align: middle;
+    }
+
+    @media (max-width: 520px) {
+      main { gap: 32px; padding: 80px 12px 40px; }
+      .header h1 { font-size: 1.8rem; }
+      .carousel-wrap { gap: 8px; }
+      .arrow-btn { width: 36px; height: 36px; font-size: 1.1rem; }
+      .code-inputs { gap: 3px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .carousel-track { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+<main>
+  <div class="header">
+    <h1>Wszystkiego najlepszegoo 🎂🎂🎂</h1>
+  </div>
+
+  <!-- KARUZELA ZDJĘĆ -->
+  <div class="carousel-wrap">
+    <button class="arrow-btn" id="prevBtn" aria-label="Poprzednie zdjęcie">&#10094;</button>
+    <div class="carousel-viewport">
+      <div class="carousel-track" id="track"></div>
+    </div>
+    <button class="arrow-btn" id="nextBtn" aria-label="Następne zdjęcie">&#10095;</button>
+  </div>
+  <div class="dots" id="dots"></div>
+
+  <!-- ODPOWIEDŹ (pojawia się po dojściu do ostatniego zdjęcia) -->
+  <div id="video-section">
+    <button class="back-link" id="backToPhotos" aria-label="Wróć do zdjęć">&#8249;</button>
+    <p class="header-eyebrow" style="margin-bottom:0;">29 · 10 · 2026</p>
+    <div class="code-inputs" id="answerBoxes"></div>
+    <div class="cloud-hint" id="hint">Czy to pora już na śniadanie?</div>
+  </div>
+</main>
+
+<script>
+  // 24 gwiazdki — identycznie jak na stronie 1
+  const stars = [
+    {x:5,y:8,s:9,c:'#FFE8F4',o:0.85},{x:18,y:4,s:7,c:'#ffffff',o:0.9},
+    {x:32,y:9,s:8,c:'#ff80c8',o:0.6},{x:47,y:5,s:10,c:'#FFE8F4',o:0.8},
+    {x:63,y:7,s:7,c:'#ffffff',o:0.95},{x:78,y:3,s:8,c:'#ff80c8',o:0.55},
+    {x:91,y:9,s:9,c:'#FFE8F4',o:0.8},{x:97,y:18,s:7,c:'#ffffff',o:0.9},
+    {x:3,y:28,s:8,c:'#ff80c8',o:0.6},{x:13,y:22,s:6,c:'#FFE8F4',o:0.7},
+    {x:55,y:15,s:7,c:'#ffffff',o:0.85},{x:85,y:22,s:9,c:'#ff80c8',o:0.55},
+    {x:8,y:48,s:7,c:'#FFE8F4',o:0.75},{x:95,y:42,s:8,c:'#ffffff',o:0.85},
+    {x:22,y:58,s:6,c:'#ff80c8',o:0.55},{x:76,y:52,s:8,c:'#FFE8F4',o:0.7},
+    {x:4,y:68,s:9,c:'#ffffff',o:0.8},{x:92,y:65,s:7,c:'#ff80c8',o:0.6},
+    {x:38,y:72,s:8,c:'#FFE8F4',o:0.75},{x:62,y:78,s:6,c:'#ffffff',o:0.9},
+    {x:15,y:82,s:8,c:'#ff80c8',o:0.55},{x:48,y:88,s:9,c:'#FFE8F4',o:0.8},
+    {x:80,y:85,s:7,c:'#ffffff',o:0.85},{x:96,y:92,s:8,c:'#ff80c8',o:0.6},
+  ];
+  stars.forEach(({x,y,s,c,o}) => {
+    const el = document.createElement('span');
+    el.className = 'star';
+    el.textContent = '★';
+    el.style.cssText = `left:${x}%;top:${y}%;font-size:${s}px;color:${c};opacity:${o};`;
+    document.body.appendChild(el);
+  });
+
+  // ====== ZDJĘCIA — edytuj tę listę, gdy wgrasz pliki na serwer ======
+  const PHOTOS = [
+    'maliny.jpg',
+    'pierogi.jpg',
+    'basia.jpg',
+    'sabo.jpg',
+  ];
+  // ===================================================================
+
+  const track = document.getElementById('track');
+  const dotsWrap = document.getElementById('dots');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const carouselWrap = document.querySelector('.carousel-wrap');
+  const videoSection = document.getElementById('video-section');
+  let current = 0;
+
+  PHOTOS.forEach((src, i) => {
+    const slide = document.createElement('div');
+    slide.className = 'slide';
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = 'Zdjęcie ' + (i + 1);
+    img.onerror = function () {
+      this.remove();
+      const ph = document.createElement('div');
+      ph.className = 'placeholder';
+      ph.textContent = 'tu pojawi się zdjęcie ' + (i + 1);
+      slide.appendChild(ph);
+    };
+    slide.appendChild(img);
+    track.appendChild(slide);
+
+    const dot = document.createElement('span');
+    dot.className = 'dot';
+    dotsWrap.appendChild(dot);
+  });
+
+  const dots = Array.from(dotsWrap.children);
+
+  function goTo(index) {
+    current = Math.max(0, Math.min(PHOTOS.length, index));
+    const inVideoMode = current === PHOTOS.length;
+
+    if (!inVideoMode) track.style.transform = `translateX(-${current * 100}%)`;
+
+    carouselWrap.style.display = inVideoMode ? 'none' : 'flex';
+    dotsWrap.style.display = inVideoMode ? 'none' : 'flex';
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = inVideoMode;
+
+    videoSection.classList.toggle('visible', inVideoMode);
+  }
+
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', () => goTo(current + 1));
+  document.getElementById('backToPhotos').addEventListener('click', () => goTo(PHOTOS.length - 1));
+
+  // przesuwanie palcem na telefonie
+  let touchStartX = null;
+  track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  track.addEventListener('touchend', e => {
+    if (touchStartX === null) return;
+    const diff = e.changedTouches[0].clientX - touchStartX;
+    if (diff > 40) goTo(current - 1);
+    else if (diff < -40) goTo(current + 1);
+    touchStartX = null;
+  });
+
+  goTo(0);
+
+  // ====== ODPOWIEDŹ NA PYTANIE Z FILMIKU ======
+  // jeden krótki wybuch konfetti
+  let solved = false;
+  function confettiBurst() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const colors = ['#FF2D9B', '#ff80c8', '#FFE8F4', '#ffffff', '#FFD700'];
+    const layer = document.createElement('div');
+    layer.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:200;overflow:hidden;';
+    document.body.appendChild(layer);
+    const ox = window.innerWidth / 2;
+    const oy = window.innerHeight * 0.55;
+    for (let i = 0; i < 70; i++) {
+      const p = document.createElement('span');
+      const w = 6 + Math.random() * 6;
+      const h = w * (0.5 + Math.random() * 0.8);
+      p.style.cssText = `position:absolute;left:${ox}px;top:${oy}px;width:${w}px;height:${h}px;` +
+        `background:${colors[Math.floor(Math.random() * colors.length)]};` +
+        `border-radius:${Math.random() < 0.3 ? '50%' : '1px'};`;
+      const ang = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.2;
+      const speed = 180 + Math.random() * 320;
+      const dx = Math.cos(ang) * speed;
+      const dy = Math.sin(ang) * speed;
+      const rot = (Math.random() - 0.5) * 720;
+      p.animate([
+        { transform: 'translate(0,0) rotate(0deg)', opacity: 1 },
+        { transform: `translate(${dx * 0.7}px,${dy * 0.7}px) rotate(${rot * 0.6}deg)`, opacity: 1, offset: 0.45 },
+        { transform: `translate(${dx}px,${dy + 260}px) rotate(${rot}deg)`, opacity: 0 }
+      ], { duration: 1100 + Math.random() * 300, easing: 'cubic-bezier(.2,.7,.4,1)', fill: 'forwards' });
+      layer.appendChild(p);
+    }
+    setTimeout(() => layer.remove(), 1700);
+  }
+
+  const ANSWER = 'Lokomotywa';
+  const answerUpper = ANSWER.toUpperCase();
+  const boxesWrap = document.getElementById('answerBoxes');
+
+  answerUpper.split('').forEach((_, i) => {
+    const inp = document.createElement('input');
+    inp.className = 'code-box';
+    inp.maxLength = 1;
+    inp.autocomplete = 'off';
+    inp.id = 'a' + i;
+    boxesWrap.appendChild(inp);
+  });
+
+  const aboxes = Array.from(boxesWrap.children);
+  let wrongTries = 0;
+
+  aboxes.forEach((box, i) => {
+    box.addEventListener('input', () => {
+      box.value = box.value.replace(/[^\p{L}]/gu, '').slice(-1).toUpperCase();
+      if (box.value && i < aboxes.length - 1) aboxes[i + 1].focus();
+      checkAnswer();
+    });
+
+    box.addEventListener('keydown', e => {
+      if (e.key === 'Backspace' && box.value === '' && i > 0) aboxes[i - 1].focus();
+    });
+
+    box.addEventListener('paste', e => {
+      e.preventDefault();
+      const text = (e.clipboardData || window.clipboardData).getData('text')
+        .replace(/[^\p{L}]/gu, '').toUpperCase();
+      text.split('').forEach((ch, j) => { if (aboxes[i + j]) aboxes[i + j].value = ch; });
+      checkAnswer();
+    });
+  });
+
+  function checkAnswer() {
+    if (solved) return;
+    const entered = aboxes.map(b => b.value).join('');
+    if (entered.length < aboxes.length) return;
+
+    if (entered === answerUpper) {
+      solved = true;
+      document.getElementById('hint').classList.remove('visible');
+      confettiBurst();
+      setTimeout(() => { window.location.href = 'list.html'; }, 1300);
+    } else {
+      wrongTries++;
+      aboxes.forEach(b => b.classList.add('error'));
+      setTimeout(() => {
+        aboxes.forEach(b => { b.classList.remove('error'); b.value = ''; });
+        aboxes[0].focus();
+      }, 600);
+      if (wrongTries >= 5) document.getElementById('hint').classList.add('visible');
+    }
+  }
+</script>
+</body>
+</html>
