@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
   <title>Coś się szykuje ding dong...</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
@@ -318,6 +319,101 @@
       line-height: 1.7;
     }
 
+    #code-section {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      animation: fadeIn 1s ease;
+    }
+
+    #code-section.visible { display: flex; }
+
+    .code-inputs {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .code-box {
+      width: clamp(44px, 8vw, 72px);
+      height: clamp(64px, 12vw, 108px);
+      background: #0a0510;
+      border: 1px solid rgba(255,45,155,0.3);
+      border-radius: 3px;
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: var(--cream);
+      caret-color: var(--pink);
+      outline: none;
+      line-height: 1;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -moz-appearance: textfield;
+    }
+
+    .code-box::-webkit-inner-spin-button,
+    .code-box::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+    .code-box:focus {
+      border-color: var(--pink);
+      box-shadow: 0 0 12px rgba(255,45,155,0.25);
+    }
+
+    .code-box.error {
+      border-color: #ff4444;
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%      { transform: translateX(-6px); }
+      40%      { transform: translateX(6px); }
+      60%      { transform: translateX(-4px); }
+      80%      { transform: translateX(4px); }
+    }
+
+    .cloud-hint {
+      display: none;
+      background: var(--bg-mid);
+      border: 1px solid rgba(255,45,155,0.3);
+      border-radius: 16px;
+      padding: 16px 22px;
+      max-width: 300px;
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      color: var(--cream);
+      line-height: 1.6;
+      position: relative;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .cloud-hint::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-bottom-color: rgba(255,45,155,0.3);
+    }
+
+    .cloud-hint::after {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-bottom-color: var(--bg-mid);
+    }
+
+    .cloud-hint.visible { display: block; }
+
     @media (max-width: 520px) {
       main { gap: 32px; padding: 90px 12px 40px; }
       .board { gap: 8px; padding: 18px 12px; }
@@ -329,6 +425,8 @@
       .header h1 { font-size: 1.8rem; }
       .footer-text { font-size: 0.9rem; }
       .popup { padding: 24px 20px; }
+      .code-box { width: 38px; height: 52px; font-size: 1.4rem; }
+      .code-inputs { gap: 6px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -409,6 +507,21 @@
         <button class="hint-btn" id="btn12" onclick="openPopup('popup12')">A właśnie! Ten pociąg..</button>
         <button class="hint-btn" id="btn13" onclick="openPopup('popup13')">Tylko gdzie on jedzie..</button>
         <button class="hint-btn" id="btn14" onclick="openPopup('popup14')">Chwila.. coś tu nie gra</button>
+      </div>
+    </div>
+
+    <div id="code-section">
+      <div class="code-inputs">
+        <input class="code-box" id="c0" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
+        <input class="code-box" id="c1" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
+        <input class="code-box" id="c2" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
+        <input class="code-box" id="c3" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
+        <input class="code-box" id="c4" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
+        <input class="code-box" id="c5" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
+        <input class="code-box" id="c6" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
+      </div>
+      <div class="cloud-hint" id="cloud-hint">
+        A pamiętasz złoty bilet na podróż autostopem? Przypatrz się mu &lt;3
       </div>
     </div>
   </div>
@@ -527,10 +640,94 @@
     document.getElementById(activeId).classList.add('visible');
   }
 
+  // jeden krótki wybuch konfetti
+  let solved = false;
+  function confettiBurst() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const colors = ['#FF2D9B', '#ff80c8', '#FFE8F4', '#ffffff', '#FFD700'];
+    const layer = document.createElement('div');
+    layer.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:200;overflow:hidden;';
+    document.body.appendChild(layer);
+    const ox = window.innerWidth / 2;
+    const oy = window.innerHeight * 0.55;
+    for (let i = 0; i < 70; i++) {
+      const p = document.createElement('span');
+      const w = 6 + Math.random() * 6;
+      const h = w * (0.5 + Math.random() * 0.8);
+      p.style.cssText = `position:absolute;left:${ox}px;top:${oy}px;width:${w}px;height:${h}px;` +
+        `background:${colors[Math.floor(Math.random() * colors.length)]};` +
+        `border-radius:${Math.random() < 0.3 ? '50%' : '1px'};`;
+      const ang = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.2;
+      const speed = 180 + Math.random() * 320;
+      const dx = Math.cos(ang) * speed;
+      const dy = Math.sin(ang) * speed;
+      const rot = (Math.random() - 0.5) * 720;
+      p.animate([
+        { transform: 'translate(0,0) rotate(0deg)', opacity: 1 },
+        { transform: `translate(${dx * 0.7}px,${dy * 0.7}px) rotate(${rot * 0.6}deg)`, opacity: 1, offset: 0.45 },
+        { transform: `translate(${dx}px,${dy + 260}px) rotate(${rot}deg)`, opacity: 0 }
+      ], { duration: 1100 + Math.random() * 300, easing: 'cubic-bezier(.2,.7,.4,1)', fill: 'forwards' });
+      layer.appendChild(p);
+    }
+    setTimeout(() => layer.remove(), 1700);
+  }
+
+  const CORRECT_CODE = '4526978';
+  const boxes = Array.from({length: 7}, (_, i) => document.getElementById('c' + i));
+  let wrongAttempts = 0;
+
+  boxes.forEach((box, i) => {
+    box.addEventListener('input', () => {
+      box.value = box.value.replace(/[^0-9]/g, '');
+      if (box.value.length === 1 && i < boxes.length - 1) {
+        boxes[i + 1].focus();
+      }
+      checkCode();
+    });
+
+    box.addEventListener('keydown', e => {
+      if (e.key === 'Backspace' && box.value === '' && i > 0) {
+        boxes[i - 1].focus();
+      }
+    });
+
+    box.addEventListener('paste', e => {
+      e.preventDefault();
+      const text = (e.clipboardData || window.clipboardData).getData('text').replace(/[^0-9]/g,'');
+      text.split('').forEach((ch, j) => {
+        if (boxes[i + j]) boxes[i + j].value = ch;
+      });
+      checkCode();
+    });
+  });
+
+  function checkCode() {
+    if (solved) return;
+    const entered = boxes.map(b => b.value).join('');
+    if (entered.length < 7) return;
+
+    if (entered === CORRECT_CODE) {
+      solved = true;
+      document.getElementById('cloud-hint').classList.remove('visible');
+      confettiBurst();
+      setTimeout(() => { window.location.href = 'urodziny.html'; }, 1300);
+    } else {
+      wrongAttempts++;
+      boxes.forEach(b => { b.classList.add('error'); });
+      setTimeout(() => {
+        boxes.forEach(b => { b.classList.remove('error'); b.value = ''; });
+        boxes[0].focus();
+      }, 600);
+
+      if (wrongAttempts >= 5) {
+        document.getElementById('cloud-hint').classList.add('visible');
+      }
+    }
+  }
+
   const target = new Date('2026-10-28T23:00:00Z');
   const prev = { d:'--', h:'--', m:'--', s:'--' };
   let countdownDone = false;
-  let countdownInterval = null;
 
   function pad(n) { return String(n).padStart(2,'0'); }
 
@@ -544,20 +741,28 @@
     }
   }
 
-  function tick() {
+  function showCodeSection() {
     if (countdownDone) return;
+    countdownDone = true;
+    const board = document.getElementById('board');
+    const codeSection = document.getElementById('code-section');
+    board.style.visibility = 'hidden';
+    board.style.position = 'absolute';
+    document.getElementById('bottom-section').style.display = 'none';
+    document.querySelector('.header h1').style.display = 'none';
+    codeSection.classList.add('visible');
+    setTimeout(() => {
+      board.style.display = 'none';
+      boxes[0].focus();
+    }, 50);
+  }
 
+  function tick() {
     const now = new Date();
     const diff = target - now;
 
     if (diff <= 0) {
-      setDigit('d0', '0'); setDigit('d1', '0');
-      setDigit('h0', '0'); setDigit('h1', '0');
-      setDigit('m0', '0'); setDigit('m1', '0');
-      setDigit('s0', '0'); setDigit('s1', '0');
-      updateButtons();
-      countdownDone = true;
-      if (countdownInterval) clearInterval(countdownInterval);
+      showCodeSection();
       return;
     }
 
@@ -578,7 +783,7 @@
   }
 
   tick();
-  countdownInterval = setInterval(tick, 1000);
+  setInterval(tick, 1000);
 </script>
 </body>
 </html>
