@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <title>Coś wyjątkowego...</title>
+  <title>Coś się szykuje ding dong...</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -76,7 +76,6 @@
 
     .header h1 em { font-style: italic; color: var(--cream); }
 
-    /* KARUZELA ZDJĘĆ */
     .carousel-wrap {
       display: flex;
       align-items: center;
@@ -158,7 +157,6 @@
 
     .dot.active { background: var(--pink); transform: scale(1.3); }
 
-    /* SEKCJA: ODPOWIEDŹ */
     #video-section {
       display: none;
       flex-direction: column;
@@ -193,7 +191,6 @@
 
     .back-link:hover { opacity: 1; }
 
-    /* Kratki na odpowiedź — zawsze w jednej linii, dzielą całą szerokość */
     .code-inputs {
       display: flex;
       flex-wrap: nowrap;
@@ -245,7 +242,6 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* Chmurka z podpowiedzią — identyczna jak na stronie 1 */
     .cloud-hint {
       display: none;
       background: var(--bg-mid);
@@ -318,7 +314,6 @@
     <h1>Wszystkiego najlepszegoo 🎂🎂🎂</h1>
   </div>
 
-  <!-- KARUZELA ZDJĘĆ -->
   <div class="carousel-wrap">
     <button class="arrow-btn" id="prevBtn" aria-label="Poprzednie zdjęcie">&#10094;</button>
     <div class="carousel-viewport">
@@ -328,7 +323,6 @@
   </div>
   <div class="dots" id="dots"></div>
 
-  <!-- ODPOWIEDŹ (pojawia się po dojściu do ostatniego zdjęcia) -->
   <div id="video-section">
     <button class="back-link" id="backToPhotos" aria-label="Wróć do zdjęć">&#8249;</button>
     <p class="header-eyebrow" style="margin-bottom:0;">29 · 10 · 2026</p>
@@ -338,7 +332,6 @@
 </main>
 
 <script>
-  // 24 gwiazdki — identycznie jak na stronie 1
   const stars = [
     {x:5,y:8,s:9,c:'#FFE8F4',o:0.85},{x:18,y:4,s:7,c:'#ffffff',o:0.9},
     {x:32,y:9,s:8,c:'#ff80c8',o:0.6},{x:47,y:5,s:10,c:'#FFE8F4',o:0.8},
@@ -361,14 +354,12 @@
     document.body.appendChild(el);
   });
 
-  // ====== ZDJĘCIA — edytuj tę listę, gdy wgrasz pliki na serwer ======
   const PHOTOS = [
     'maliny.jpg',
     'pierogi.jpg',
     'basia.jpg',
     'sabo.jpg',
   ];
-  // ===================================================================
 
   const track = document.getElementById('track');
   const dotsWrap = document.getElementById('dots');
@@ -420,7 +411,6 @@
   nextBtn.addEventListener('click', () => goTo(current + 1));
   document.getElementById('backToPhotos').addEventListener('click', () => goTo(PHOTOS.length - 1));
 
-  // przesuwanie palcem na telefonie
   let touchStartX = null;
   track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
   track.addEventListener('touchend', e => {
@@ -433,8 +423,6 @@
 
   goTo(0);
 
-  // ====== ODPOWIEDŹ NA PYTANIE Z FILMIKU ======
-  // jeden krótki wybuch konfetti
   let solved = false;
   function confettiBurst() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
